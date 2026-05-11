@@ -1,0 +1,38 @@
+# .gitignore
+
+# Окружение
+.env
+*.env
+!.env.example
+
+# Зависимости
+node_modules/
+.pnp
+
+# Билд
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+backend/main
+
+# Логи
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Система
+.DS_Store
+Thumbs.db
+
+# Кэш
+.cache/
+.next/
+.nuxt/

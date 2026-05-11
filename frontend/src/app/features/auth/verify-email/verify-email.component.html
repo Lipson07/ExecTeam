@@ -1,0 +1,43 @@
+<div class="authPage">
+  <div class="authCard">
+    <a (click)="onBack()" class="backLink">← Назад</a>
+
+    <div class="authHeader">
+      <h1>Подтверждение</h1>
+      <p>Мы отправили код на вашу почту</p>
+    </div>
+
+    <form class="authForm" [formGroup]="verifyForm" (ngSubmit)="onSubmit()">
+      @if (serverError) {
+        <div class="serverError">{{ serverError }}</div>
+      }
+
+      @if (successMessage) {
+        <div class="successMessage">{{ successMessage }}</div>
+      }
+
+      <div class="inputGroup">
+        <label>Email</label>
+        <input type="email" [value]="submittedEmail" placeholder="email@example.com" readonly />
+      </div>
+
+      <div class="inputGroup">
+        <label>Код из письма</label>
+        <input
+          type="text"
+          formControlName="code"
+          [class.error]="isValidated()"
+          placeholder="Введите код"
+          maxlength="6"
+        />
+        @if (isValidated()) {
+          <span class="errorText">Введите код из 6 цифр</span>
+        }
+      </div>
+
+      <button type="submit">Подтвердить</button>
+    </form>
+
+    <button type="button" class="resendLink" (click)="resendCode()">Отправить код ещё раз</button>
+  </div>
+</div>

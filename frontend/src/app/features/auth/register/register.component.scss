@@ -1,0 +1,256 @@
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg-primary);
+
+  @media (max-width: 480px) {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+}
+
+.authCard {
+  width: 100%;
+  max-width: 420px;
+  background: #0c0c0c;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 44px 40px;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    padding: 32px 24px;
+    border-radius: 16px;
+    border: none;
+    background: transparent;
+  }
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 36px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 28px;
+  }
+}
+
+.authHeader {
+  margin-bottom: 36px;
+
+  h1 {
+    font-size: 28px;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+
+    @media (max-width: 480px) {
+      font-size: 24px;
+    }
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    input {
+      padding: 14px 16px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+
+      &::placeholder {
+        color: #3d3d3d;
+      }
+
+      &:focus {
+        border-color: #2a2a2a;
+        background: #0d0d0d;
+      }
+
+      &.error {
+        border-color: #4a2020;
+      }
+    }
+
+    .errorText {
+      font-size: 11px;
+      color: #b85555;
+    }
+  }
+
+  .forgotLink {
+    align-self: flex-end;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-decoration: none;
+    margin-top: -8px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  button {
+    padding: 15px;
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+
+    &:hover {
+      background: var(--accent-hover);
+    }
+
+    @media (max-width: 480px) {
+      padding: 16px;
+    }
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 28px 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+  }
+}
+
+.socials {
+  display: flex;
+  gap: 10px;
+
+  .socialBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    svg {
+      opacity: 0.5;
+    }
+
+    &:hover {
+      border-color: #2a2a2a;
+      color: var(--text-primary);
+      svg {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.bottomLink {
+  margin-top: 32px;
+  color: var(--text-secondary);
+  font-size: 13px;
+
+  a {
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-primary);
+    }
+  }
+}
+
+.serverError {
+  background: rgba(184, 85, 85, 0.06);
+  border: 1px solid rgba(184, 85, 85, 0.12);
+  color: #b85555;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.successMessage {
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.resendLink {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--text-primary);
+  }
+}

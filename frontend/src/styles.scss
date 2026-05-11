@@ -1,0 +1,22 @@
+:root {
+  --bg-primary: #0a0a0a;
+  --text-primary: #ededed;
+  --text-secondary: #6b6b6b;
+  --accent-primary: #ffffff;
+  --accent-hover: #cccccc;
+  --border-color: #1f1f1f;
+  --font-primary: 'Space Grotesk', -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+}

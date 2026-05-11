@@ -1,0 +1,124 @@
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.meetPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: var(--bg-primary);
+}
+
+.meetContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 0 24px;
+
+  @media (max-width: 480px) {
+    gap: 20px;
+  }
+}
+
+.brand {
+  font-size: 64px;
+  letter-spacing: -2px;
+  animation: fadeUp 1s ease-out;
+  user-select: none;
+
+  .logo-exec {
+    font-weight: 400;
+    color: var(--text-primary);
+  }
+  .logo-team {
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 600px) {
+    font-size: 48px;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 42px;
+  }
+}
+
+.description {
+  font-size: 17px;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 460px;
+  line-height: 1.7;
+  font-weight: 400;
+  animation: fadeUp 1s ease-out 0.15s both;
+
+  @media (max-width: 600px) {
+    font-size: 15px;
+    max-width: 340px;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 14px;
+  }
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  animation: fadeUp 1s ease-out 0.3s both;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  button {
+    height: 44px;
+    padding: 0 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+
+    @media (max-width: 400px) {
+      width: 100%;
+      height: 46px;
+    }
+  }
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border: none;
+
+  &:hover {
+    background: var(--accent-hover);
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: #333;
+  }
+}
