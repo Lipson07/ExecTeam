@@ -1,13 +1,10 @@
 package handler
 
 import (
-	"encoding/json"
-	"io"
-	"log"
-	"net/http"
-
 	"backend/internal/model"
 	"backend/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type AuthHandler struct {
@@ -18,75 +15,65 @@ func NewAuthHandler(service service.AuthService) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
-func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Register(c *gin.Context) {
 	var req model.RegisterRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeError(w, http.StatusBadRequest, "неверный формат")
+	if err := c.ShouldBindJSON(&req); err != nil {
+		writeError(c, 400, "неверный формат")
 		return
 	}
 
 	resp, err := h.service.Register(&req)
 	if err != nil {
-		writeError(w, http.StatusConflict, err.Error())
+		writeError(c, 409, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusCreated, resp)
+	writeJSON(c, 201, resp)
 }
 
-func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Login(c *gin.Context) {
 	var req model.LoginRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeError(w, http.StatusBadRequest, "неверный формат")
+	if err := c.ShouldBindJSON(&req); err != nil {
+		writeError(c, 400, "неверный формат")
 		return
 	}
 
 	resp, err := h.service.Login(&req)
 	if err != nil {
-		writeError(w, http.StatusUnauthorized, err.Error())
+		writeError(c, 401, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, resp)
+	writeJSON(c, 200, resp)
 }
 
-func (h *AuthHandler) VerifyEmail(w http.ResponseWriter, r *http.Request) {
-	body, _ := io.ReadAll(r.Body)
-	defer r.Body.Close()
-
-	log.Printf("VerifyEmail raw: %s", string(body)) // ← добавь
-
+func (h *AuthHandler) VerifyEmail(c *gin.Context) {
 	var req model.VerifyEmailRequest
-	if err := json.Unmarshal(body, &req); err != nil {
-		writeError(w, http.StatusBadRequest, "неверный формат")
+	if err := c.ShouldBindJSON(&req); err != nil {
+		writeError(c, 400, "неверный формат")
 		return
 	}
-
-	log.Printf("VerifyEmail: email=%s code=%s", req.Email, req.Code) // ← добавь
 
 	resp, err := h.service.VerifyEmail(req.Email, req.Code)
 	if err != nil {
-		log.Printf("VerifyEmail error: %v", err) // ← добавь
-		writeError(w, http.StatusBadRequest, err.Error())
+		writeError(c, 400, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, resp)
+	writeJSON(c, 200, resp)
 }
-func (h *AuthHandler) ResendCode(w http.ResponseWriter, r *http.Request) {
-	body, _ := io.ReadAll(r.Body)
-	defer r.Body.Close()
 
+func (h *AuthHandler) ResendCode(c *gin.Context) {
 	var req model.ResendCodeRequest
-	if err := json.Unmarshal(body, &req); err != nil {
-		writeError(w, http.StatusBadRequest, "неверный формат")
+	if err := c.ShouldBindJSON(&req); err != nil {
+		writeError(c, 400, "неверный формат")
 		return
 	}
 
 	if err := h.service.ResendCode(req.Email); err != nil {
-		writeError(w, http.StatusBadRequest, err.Error())
+		writeError(c, 400, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]string{"message": "код отправлен"})
+	writeJSON(c, 200, map[string]string{"message": "код отправлен"})
 }

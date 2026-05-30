@@ -1,14 +1,13 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi/v5"
-
 	"backend/internal/model"
 	"backend/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
@@ -19,91 +18,111 @@ func NewUserHandler(service service.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
 
-func (h *UserHandler) GetMe(w http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value("user_id").(int)
-
-	user, err := h.service.GetByID(userID)
-	if err != nil {
-		writeError(w, http.StatusNotFound, err.Error())
+func (h *UserHandler) GetMe(c *gin.Context) {
+	userIDIface, exists := c.Get("user_id")
+	if !exists {
+		writeError(c, http.StatusInternalServerError, "не удалось получить пользователя")
 		return
 	}
 
-	writeJSON(w, http.StatusOK, user)
+	userID, ok := userIDIface.(int)
+	if !ok {
+		writeError(c, http.StatusInternalServerError, "не удалось получить пользователя")
+		return
+	}
+
+	user, err := h.service.GetByID(userID)
+	if err != nil {
+		writeError(c, http.StatusNotFound, err.Error())
+		return
+	}
+
+	writeJSON(c, http.StatusOK, user)
 }
 
-func (h *UserHandler) UpdateMe(w http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value("user_id").(int)
+func (h *UserHandler) UpdateMe(c *gin.Context) {
+	userIDIface, exists := c.Get("user_id")
+	if !exists {
+		writeError(c, http.StatusInternalServerError, "не удалось получить пользователя")
+		return
+	}
+
+	userID, ok := userIDIface.(int)
+	if !ok {
+		writeError(c, http.StatusInternalServerError, "не удалось получить пользователя")
+		return
+	}
 
 	var req model.UpdateUserRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeError(w, http.StatusBadRequest, "неверный формат данных")
+	if err := c.ShouldBindJSON(&req); err != nil {
+		writeError(c, http.StatusBadRequest, "неверный формат данных")
 		return
 	}
 
 	user, err := h.service.UpdateMe(userID, &req)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		writeError(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, user)
+	writeJSON(c, http.StatusOK, user)
 }
 
-func (h *UserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) GetAll(c *gin.Context) {
 	users, err := h.service.GetAll()
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		writeError(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, users)
+	writeJSON(c, http.StatusOK, users)
 }
 
-func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
-	idStr := chi.URLParam(r, "id")
+func (h *UserHandler) GetByID(c *gin.Context) {
+	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		writeError(w, http.StatusBadRequest, "неверный ID")
+		writeError(c, http.StatusBadRequest, "неверный ID")
 		return
 	}
 
 	user, err := h.service.GetByID(id)
 	if err != nil {
-		writeError(w, http.StatusNotFound, err.Error())
+		writeError(c, http.StatusNotFound, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, user)
+	writeJSON(c, http.StatusOK, user)
 }
 
-func (h *UserHandler) SearchByName(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
+func (h *UserHandler) SearchByName(c *gin.Context) {
+	name := c.Query("name")
 	if name == "" {
-		writeError(w, http.StatusBadRequest, "параметр name обязателен")
+		writeError(c, http.StatusBadRequest, "параметр name обязателен")
 		return
 	}
 
 	users, err := h.service.SearchByName(name)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		writeError(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, users)
+	writeJSON(c, http.StatusOK, users)
 }
 
-func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	idStr := chi.URLParam(r, "id")
+func (h *UserHandler) Delete(c *gin.Context) {
+	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		writeError(w, http.StatusBadRequest, "неверный ID")
+		writeError(c, http.StatusBadRequest, "неверный ID")
 		return
 	}
 
 	if err := h.service.Delete(id); err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		writeError(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]string{"message": "пользователь удалён"})
+	writeJSON(c, http.StatusOK, map[string]string{"message": "пользователь удалён"})
 }

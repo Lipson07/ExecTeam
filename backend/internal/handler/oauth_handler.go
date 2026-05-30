@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
-
 	"backend/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type OAuthHandler struct {
@@ -16,35 +16,33 @@ func NewOAuthHandler(service service.OAuthService) *OAuthHandler {
 	return &OAuthHandler{service: service}
 }
 
-func (h *OAuthHandler) GetAuthURL(w http.ResponseWriter, r *http.Request) {
-	provider := chi.URLParam(r, "provider")
+func (h *OAuthHandler) GetAuthURL(c *gin.Context) {
+	provider := c.Param("provider")
 
 	url, err := h.service.GetOAuthURL(provider)
 	if err != nil {
-		writeError(w, http.StatusBadRequest, err.Error())
+		writeError(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	// Редирект на OAuth провайдера
-	http.Redirect(w, r, url, http.StatusFound)
+	c.Redirect(http.StatusFound, url)
 }
 
-func (h *OAuthHandler) Callback(w http.ResponseWriter, r *http.Request) {
-	provider := chi.URLParam(r, "provider")
-	code := r.URL.Query().Get("code")
+func (h *OAuthHandler) Callback(c *gin.Context) {
+	provider := c.Param("provider")
+	code := c.Query("code")
 
 	if code == "" {
-		writeError(w, http.StatusBadRequest, "код не передан")
+		writeError(c, http.StatusBadRequest, "код не передан")
 		return
 	}
 
 	resp, err := h.service.HandleCallback(provider, code)
 	if err != nil {
-		writeError(w, http.StatusInternalServerError, err.Error())
+		writeError(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// Редирект на фронт с JWT токеном
 	frontendURL := "http://localhost:4200/auth/callback?token=" + resp.Token
-	http.Redirect(w, r, frontendURL, http.StatusFound)
+	c.Redirect(http.StatusFound, frontendURL)
 }

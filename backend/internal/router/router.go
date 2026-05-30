@@ -1,9 +1,8 @@
 package router
 
 import (
-	"github.com/go-chi/chi/v5"
-	chimw "github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 
 	"backend/internal/handler"
 	"backend/internal/middleware"
@@ -14,34 +13,39 @@ func NewRouter(
 	authHandler *handler.AuthHandler,
 	oauthHandler *handler.OAuthHandler,
 	authMW *middleware.AuthMiddleware,
-	corsMW *cors.Cors,
-) *chi.Mux {
-	r := chi.NewRouter()
+) *gin.Engine {
+	r := gin.New()
 
-	r.Use(chimw.Logger)
-	r.Use(chimw.Recoverer)
-	r.Use(corsMW.Handler)
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:4200"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 
-	r.Route("/api", func(r chi.Router) {
-		r.Post("/register", authHandler.Register)
-		r.Post("/login", authHandler.Login)
-		r.Post("/verify-email", authHandler.VerifyEmail)
-		r.Post("/resend-code", authHandler.ResendCode)
+	api := r.Group("/api")
+	{
+		api.POST("/register", authHandler.Register)
+		api.POST("/login", authHandler.Login)
+		api.POST("/verify-email", authHandler.VerifyEmail)
+		api.POST("/resend-code", authHandler.ResendCode)
 
-		r.Get("/auth/{provider}", oauthHandler.GetAuthURL)
-		r.Get("/auth/{provider}/callback", oauthHandler.Callback)
+		api.GET("/auth/:provider", oauthHandler.GetAuthURL)
+		api.GET("/auth/:provider/callback", oauthHandler.Callback)
 
-		r.Group(func(r chi.Router) {
-			r.Use(authMW.RequireAuth)
+		auth := api.Group("/")
+		auth.Use(authMW.RequireAuth)
 
-			r.Get("/users/me", userHandler.GetMe)
-			r.Put("/users/me", userHandler.UpdateMe)
-			r.Get("/users", userHandler.GetAll)
-			r.Get("/users/search", userHandler.SearchByName)
-			r.Get("/users/{id}", userHandler.GetByID)
-			r.Delete("/users/{id}", userHandler.Delete)
-		})
-	})
+		auth.GET("/users/me", userHandler.GetMe)
+		auth.PUT("/users/me", userHandler.UpdateMe)
+		auth.GET("/users", userHandler.GetAll)
+		auth.GET("/users/search", userHandler.SearchByName)
+		auth.GET("/users/:id", userHandler.GetByID)
+		auth.DELETE("/users/:id", userHandler.Delete)
+	}
 
 	return r
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/service/auth.service';
@@ -12,40 +12,28 @@ import { AuthService } from '../../../core/service/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  isSubmit = false;
-  serverError = '';
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private authService: AuthService,
-  ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
+  readonly loginForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  });
 
-  get f() {
-    return this.loginForm.controls;
-  }
+  protected isSubmit = false;
+  protected serverError = '';
 
   isValidated(controlName: string): boolean {
     const control = this.loginForm.get(controlName);
     return ((control?.touched || this.isSubmit) && control?.invalid) || false;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.isSubmit = true;
     this.serverError = '';
 
-    if (this.loginForm.invalid) {
-      Object.keys(this.loginForm.controls).forEach((key) => {
-        this.loginForm.get(key)?.markAsTouched();
-      });
-      return;
-    }
+    if (this.loginForm.invalid) return;
 
     const { email, password } = this.loginForm.value;
 
@@ -65,19 +53,11 @@ export class LoginComponent {
     });
   }
 
-  loginWithGitHub() {
+  loginWithGitHub(): void {
     this.authService.loginWithGitHub();
   }
 
-  loginWithGoogle() {
+  loginWithGoogle(): void {
     this.authService.loginWithGoogle();
-  }
-
-  onBack() {
-    this.router.navigate(['/']);
-  }
-
-  onReg() {
-    this.router.navigate(['/auth/register']);
   }
 }

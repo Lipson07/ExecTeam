@@ -1,0 +1,434 @@
+<div class="overlay" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="header-left">
+        <span class="step-badge">Шаг {{ currentStep() }} из {{ totalSteps }}</span>
+        <h2>Создание проекта</h2>
+      </div>
+      <button type="button" class="btn-close" (click)="closeModal()">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" [style.width.%]="(currentStep() / totalSteps) * 100"></div>
+    </div>
+
+    <form class="modal-body" (ngSubmit)="onSubmit()">
+      @if (currentStep() === 1) {
+        <div class="step">
+          <div class="form-group">
+            <label>Название проекта</label>
+            <input type="text" placeholder="Мой проект" class="input" name="name" />
+          </div>
+          <div class="form-group">
+            <label>Описание</label>
+            <textarea
+              placeholder="Опишите цели проекта..."
+              class="input textarea"
+              rows="4"
+              name="description"
+            ></textarea>
+          </div>
+        </div>
+      }
+
+      @if (currentStep() === 2) {
+        <div class="step">
+          <div class="form-group">
+            <label class="section-label">Репозиторий</label>
+            <p class="section-desc">Привяжите GitHub-репозиторий к проекту</p>
+
+            <div class="repo-options">
+              <label
+                class="repo-option-card"
+                [class.active]="repoAction() === 'existing'"
+                (click)="setRepoAction('existing')"
+              >
+                <input
+                  type="radio"
+                  name="repo_action"
+                  value="existing"
+                  [checked]="repoAction() === 'existing'"
+                />
+                <div class="repo-option-icon">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <path
+                      d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                    />
+                  </svg>
+                </div>
+                <div class="repo-option-info">
+                  <span class="repo-option-name">Выбрать существующий</span>
+                  <span class="repo-option-desc">Привязать уже созданный репозиторий</span>
+                </div>
+                <div class="repo-option-check">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+              </label>
+
+              <label
+                class="repo-option-card"
+                [class.active]="repoAction() === 'new'"
+                (click)="setRepoAction('new')"
+              >
+                <input
+                  type="radio"
+                  name="repo_action"
+                  value="new"
+                  [checked]="repoAction() === 'new'"
+                />
+                <div class="repo-option-icon">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                  </svg>
+                </div>
+                <div class="repo-option-info">
+                  <span class="repo-option-name">Создать новый</span>
+                  <span class="repo-option-desc">Создать репозиторий на GitHub</span>
+                </div>
+                <div class="repo-option-check">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+              </label>
+
+              <label
+                class="repo-option-card"
+                [class.active]="repoAction() === 'skip'"
+                (click)="setRepoAction('skip')"
+              >
+                <input
+                  type="radio"
+                  name="repo_action"
+                  value="skip"
+                  [checked]="repoAction() === 'skip'"
+                />
+                <div class="repo-option-icon">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </div>
+                <div class="repo-option-info">
+                  <span class="repo-option-name">Пропустить</span>
+                  <span class="repo-option-desc">Привязать репозиторий позже</span>
+                </div>
+                <div class="repo-option-check">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (currentStep() === 3 && repoAction() === 'existing') {
+        <div class="step">
+          <div class="form-group">
+            <label class="section-label">Выберите репозиторий</label>
+            <p class="section-desc">Поиск по вашим GitHub-репозиториям</p>
+
+            <div class="search">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Поиск репозитория..."
+                class="input search-input"
+                name="repoSearch"
+              />
+            </div>
+
+            <div class="radio-list">
+              @for (repo of repos(); track repo.id) {
+                <label
+                  class="radio-card"
+                  [class.active]="selectedRepoId() === repo.id"
+                  (click)="selectRepo(repo.id)"
+                >
+                  <input
+                    type="radio"
+                    name="github_id"
+                    [value]="repo.id"
+                    [checked]="selectedRepoId() === repo.id"
+                  />
+                  <div class="radio-icon">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    >
+                      <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                      />
+                    </svg>
+                  </div>
+                  <div class="radio-info">
+                    <span class="radio-name">{{ repo.name }}</span>
+                    <span class="radio-desc">{{ repo.desc }}</span>
+                  </div>
+                  <div class="radio-check">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                </label>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (currentStep() === 3 && repoAction() === 'new') {
+        <div class="step">
+          <div class="form-group">
+            <label class="section-label">Новый репозиторий</label>
+            <p class="section-desc">Будет создан в вашем GitHub-аккаунте</p>
+          </div>
+
+          <div class="form-group">
+            <label>Название</label>
+            <input type="text" placeholder="my-repo" class="input" name="new_repo_name" />
+          </div>
+
+          <div class="form-group">
+            <label>Описание</label>
+            <input
+              type="text"
+              placeholder="Описание репозитория..."
+              class="input"
+              name="new_repo_desc"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Видимость</label>
+            <div class="visibility-toggle">
+              <label
+                class="toggle-card"
+                [class.active]="newRepoVisibility() === 'private'"
+                (click)="setRepoVisibility('private')"
+              >
+                <input
+                  type="radio"
+                  name="new_repo_visibility"
+                  value="private"
+                  [checked]="newRepoVisibility() === 'private'"
+                />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  <circle cx="12" cy="16" r="1" fill="currentColor" />
+                </svg>
+                Приватный
+              </label>
+              <label
+                class="toggle-card"
+                [class.active]="newRepoVisibility() === 'public'"
+                (click)="setRepoVisibility('public')"
+              >
+                <input
+                  type="radio"
+                  name="new_repo_visibility"
+                  value="public"
+                  [checked]="newRepoVisibility() === 'public'"
+                />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                  />
+                </svg>
+                Публичный
+              </label>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (currentStep() === 4) {
+        <div class="step">
+          <div class="form-group">
+            <label class="section-label">Владелец проекта</label>
+            <p class="section-desc">Выберите ответственного за проект</p>
+
+            <div class="search">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Поиск пользователя..."
+                class="input search-input"
+                name="userSearch"
+              />
+            </div>
+
+            <div class="radio-list">
+              @for (owner of owners(); track owner.id) {
+                <label
+                  class="radio-card"
+                  [class.active]="selectedOwnerId() === owner.id"
+                  (click)="selectOwner(owner.id)"
+                >
+                  <input
+                    type="radio"
+                    name="owner_id"
+                    [value]="owner.id"
+                    [checked]="selectedOwnerId() === owner.id"
+                  />
+                  <div class="radio-icon user-avatar">{{ owner.initials }}</div>
+                  <div class="radio-info">
+                    <span class="radio-name">{{ owner.name }}</span>
+                    <span class="radio-desc">{{ owner.email }}</span>
+                  </div>
+                  <div class="radio-check">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                </label>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </form>
+
+    <div class="modal-footer">
+      @if (currentStep() > 1) {
+        <button type="button" class="btn-secondary" (click)="prevStep()">Назад</button>
+      } @else {
+        <div></div>
+      }
+
+      <div class="footer-right">
+        <span class="step-indicator">Шаг {{ currentStep() }} из {{ totalSteps }}</span>
+
+        @if (currentStep() < totalSteps) {
+          <button type="button" class="btn-primary" (click)="nextStep()">Продолжить</button>
+        } @else {
+          <button type="submit" class="btn-primary">Создать проект</button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

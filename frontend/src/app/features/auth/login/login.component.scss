@@ -31,13 +31,13 @@
 }
 
 .backLink {
-  display: inline-block;
+  display: block;
   color: var(--text-secondary);
   font-size: 13px;
   cursor: pointer;
   margin-bottom: 36px;
   transition: color 0.2s;
-
+  text-align: left;
   &:hover {
     color: var(--text-primary);
   }

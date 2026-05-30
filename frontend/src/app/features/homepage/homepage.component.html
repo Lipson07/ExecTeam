@@ -21,10 +21,14 @@
     <h2>Добро пожаловать в ExecTeam</h2>
     <p>Создайте свой первый проект или присоединитесь к существующему</p>
     <div class="actions">
-      <button class="btn-primary">Создать проект</button>
+      <button class="btn-primary" (click)="openCreateModal()">Создать проект</button>
       <button class="btn-outline">Присоединиться</button>
     </div>
   </div>
 </main>
 
 <app-footer></app-footer>
+
+@if (showCreateModal()) {
+  <app-project-create (close)="closeCreateModal()"></app-project-create>
+}

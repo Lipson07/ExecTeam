@@ -1,12 +1,8 @@
 package app
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"strings"
-
-	"github.com/go-chi/chi/v5"
 
 	"backend/config"
 	"backend/internal/handler"
@@ -60,11 +56,10 @@ func New() *App {
 	oauthHandler := handler.NewOAuthHandler(oauthService)
 
 	authMW := middleware.NewAuthMiddleware(authService)
-	corsMW := middleware.NewCORS()
 
-	r := router.NewRouter(userHandler, authHandler, oauthHandler, authMW, corsMW)
+	r := router.NewRouter(userHandler, authHandler, oauthHandler, authMW)
 
-	printRoutes(r)
+	router.PrintRoutes(r)
 
 	addr := ":" + cfg.Port
 
@@ -79,16 +74,4 @@ func New() *App {
 func (a *App) Run() error {
 	log.Printf("Сервер запущен на http://localhost%s", a.Server.Addr)
 	return a.Server.ListenAndServe()
-}
-
-func printRoutes(r *chi.Mux) {
-	fmt.Println()
-	fmt.Println("Маршруты:")
-	fmt.Println("--------")
-	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
-		route = strings.Replace(route, "/*", "", -1)
-		fmt.Printf("  %-6s %s\n", method, route)
-		return nil
-	})
-	fmt.Println()
 }

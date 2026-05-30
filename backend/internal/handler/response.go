@@ -1,20 +1,19 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"backend/internal/model"
+
+	"github.com/gin-gonic/gin"
 )
 
-func writeJSON(w http.ResponseWriter, status int, data interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
+func writeJSON(c *gin.Context, status int, data interface{}) {
+	c.JSON(status, data)
 }
 
-func writeError(w http.ResponseWriter, status int, message string) {
-	writeJSON(w, status, model.ErrorResponse{
+func writeError(c *gin.Context, status int, message string) {
+	c.JSON(status, model.ErrorResponse{
 		Error:   http.StatusText(status),
 		Message: message,
 	})

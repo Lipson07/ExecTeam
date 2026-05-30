@@ -1,6 +1,6 @@
 <div class="authPage">
   <div class="authCard">
-    <a (click)="onBack()" class="backLink">← Назад</a>
+    <a routerLink="/" class="backLink">← Назад</a>
 
     <div class="authHeader">
       <h1>Регистрация</h1>
@@ -89,6 +89,6 @@
       </button>
     </div>
 
-    <p class="bottomLink">Уже есть аккаунт? <a (click)="onLogin()">Войти</a></p>
+    <p class="bottomLink">Уже есть аккаунт? <a routerLink="/auth/login">Войти</a></p>
   </div>
 </div>

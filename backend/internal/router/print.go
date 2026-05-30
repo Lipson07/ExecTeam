@@ -2,19 +2,15 @@ package router
 
 import (
 	"fmt"
-	"net/http"
-	"strings"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 )
 
-func PrintRoutes(r *chi.Mux) {
-	fmt.Println("\nЗарегистрированные маршруты:")
+func PrintRoutes(r *gin.Engine) {
+	fmt.Println("Зарегистрированные маршруты:")
 	fmt.Println("----------------------------")
-	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
-		route = strings.Replace(route, "/*", "", -1)
-		fmt.Printf("  %-6s %s\n", method, route)
-		return nil
-	})
-	fmt.Println("----------------------------\n")
+	for _, route := range r.Routes() {
+		fmt.Printf("  %-6s %s\n", route.Method, route.Path)
+	}
+	fmt.Println("----------------------------")
 }

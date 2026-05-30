@@ -1,0 +1,424 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  background: #0c0c0c;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 28px 28px 0;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.step-badge {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.btn-close {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: all 0.15s;
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: #333;
+  }
+}
+
+.progress {
+  height: 2px;
+  background: var(--border-color);
+  margin: 20px 28px 0;
+  border-radius: 1px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+
+.modal-body {
+  padding: 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #3a3a3a;
+  }
+
+  &:focus {
+    border-color: #2a2a2a;
+    background: #0d0d0d;
+  }
+}
+
+.textarea {
+  resize: none;
+  min-height: 100px;
+  max-height: 100px;
+  line-height: 1.5;
+}
+
+.section-label {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.section-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+// Репо: варианты действий
+.repo-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.repo-option-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  &.active {
+    border-color: var(--border-color);
+    background: rgba(255, 255, 255, 0.03);
+
+    .repo-option-check {
+      opacity: 1;
+    }
+  }
+
+  input[type='radio'] {
+    display: none;
+  }
+}
+
+.repo-option-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.repo-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  text-align: left;
+}
+
+.repo-option-name {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.repo-option-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.repo-option-check {
+  opacity: 0;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+// Поиск и список репо
+.repo-search-area {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.search {
+  position: relative;
+  width: 100%;
+
+  svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+.search-input {
+  padding-left: 42px;
+}
+
+.radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.radio-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  &.active {
+    border-color: var(--border-color);
+    background: rgba(255, 255, 255, 0.03);
+
+    .radio-check {
+      opacity: 1;
+    }
+  }
+
+  input[type='radio'] {
+    display: none;
+  }
+}
+
+.radio-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #141414;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.radio-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  text-align: left;
+}
+
+.radio-name {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.radio-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.radio-check {
+  opacity: 0;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+// Форма создания нового репо
+.new-repo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+// Переключатель приватный/публичный
+.visibility-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  &.active,
+  &:has(input:checked) {
+    border-color: #2a2a2a;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-primary);
+  }
+
+  input[type='radio'] {
+    display: none;
+  }
+}
+
+// Футер
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.step-indicator {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.btn-secondary {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 24px;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: #333;
+  }
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  color: var(--bg-primary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--accent-hover);
+  }
+}
